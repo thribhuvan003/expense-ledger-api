@@ -1,0 +1,50 @@
+import { ErrorRequestHandler, RequestHandler } from "express";
+import { ZodError } from "zod";
+
+type ParserError = SyntaxError & {
+  status?: number;
+  type?: string;
+};
+
+export const notFoundHandler: RequestHandler = (_request, response) => {
+  response.status(404).json({
+    error: {
+      code: "NOT_FOUND",
+      message: "The requested route was not found."
+    }
+  });
+};
+
+export const errorHandler: ErrorRequestHandler = (error: unknown, _request, response, _next) => {
+  if (error instanceof ZodError) {
+    response.status(400).json({
+      error: {
+        code: "VALIDATION_ERROR",
+        message: "The request contains invalid data.",
+        details: error.issues.map((issue) => ({
+          field: issue.path.join(".") || "request",
+          message: issue.message
+        }))
+      }
+    });
+    return;
+  }
+
+  const parserError = error as ParserError;
+  if (parserError.type === "entity.parse.failed" && parserError.status === 400) {
+    response.status(400).json({
+      error: {
+        code: "INVALID_JSON",
+        message: "The request body contains invalid JSON."
+      }
+    });
+    return;
+  }
+
+  response.status(500).json({
+    error: {
+      code: "INTERNAL_ERROR",
+      message: "An unexpected error occurred."
+    }
+  });
+};
