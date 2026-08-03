@@ -36,7 +36,6 @@ After going through the code and testing the API, I made these changes:
 - Improved validation tests so they check which field failed, not only that an error was returned.
 - Added support for an optional ID from the client. If no ID is sent, the server generates one. If the same ID is used again, the API returns `409 Conflict`.
 - Updated the delete endpoint so it works with both generated and client-provided IDs.
-- Fixed a delete test that used an ID which was not actually valid, so it was returning `400` instead of reaching the `404` case it was written to check.
 - Added checks to prevent amounts smaller than one paisa from being stored as zero.
 - Fixed the category totals so a category name that matches a built-in object property is not dropped from the summary.
 - Replaced the earlier fixed maximum amount with validation that checks whether the value can be represented safely in paise.
