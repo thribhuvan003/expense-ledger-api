@@ -37,6 +37,14 @@ export const openApiDocument = {
                 schema: { $ref: "#/components/schemas/ErrorResponse" }
               }
             }
+          },
+          "413": {
+            description: "The JSON request body exceeds the 100 KiB limit",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ErrorResponse" }
+              }
+            }
           }
         }
       },

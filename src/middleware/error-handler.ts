@@ -1,7 +1,7 @@
 import { ErrorRequestHandler, RequestHandler } from "express";
 import { ZodError } from "zod";
 
-type ParserError = SyntaxError & {
+type ParserError = Error & {
   status?: number;
   type?: string;
 };
@@ -31,6 +31,16 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
   }
 
   const parserError = error as ParserError;
+  if (parserError.type === "entity.too.large" && parserError.status === 413) {
+    response.status(413).json({
+      error: {
+        code: "PAYLOAD_TOO_LARGE",
+        message: "The request body is too large."
+      }
+    });
+    return;
+  }
+
   if (parserError.type === "entity.parse.failed" && parserError.status === 400) {
     response.status(400).json({
       error: {

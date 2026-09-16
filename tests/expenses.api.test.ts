@@ -123,6 +123,24 @@ describe("Expense API", () => {
       expect(response.body.error.code).toBe("VALIDATION_ERROR");
     });
 
+    it("rejects oversized JSON without creating an expense", async () => {
+      const response = await request(app)
+        .post("/expenses")
+        .send({ ...validExpense, title: "x".repeat(100 * 1024) });
+
+      expect(response.status).toBe(413);
+      expect(response.body).toEqual({
+        error: {
+          code: "PAYLOAD_TOO_LARGE",
+          message: "The request body is too large."
+        }
+      });
+
+      const expenses = await request(app).get("/expenses");
+      expect(expenses.status).toBe(200);
+      expect(expenses.body).toEqual([]);
+    });
+
     it("returns a clear error for invalid JSON", async () => {
       const response = await request(app)
         .post("/expenses")
