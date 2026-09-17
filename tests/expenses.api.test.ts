@@ -47,6 +47,15 @@ describe("Expense API", () => {
       expect(response.body.category).toBe("Food");
     });
 
+    it.each([0.29, 1.1, 10000000.03])("preserves a valid amount of %s", async (amount) => {
+      const response = await request(app).post("/expenses").send({ ...validExpense, amount });
+
+      expect(response.status).toBe(201);
+      expect(response.body.amount).toBe(amount);
+      const expenses = await request(app).get("/expenses");
+      expect(expenses.body[0].amount).toBe(amount);
+    });
+
     it("uses the ID supplied by the caller", async () => {
       const response = await request(app)
         .post("/expenses")
@@ -92,6 +101,7 @@ describe("Expense API", () => {
       ["an amount too large to hold exactly", { ...validExpense, amount: 1e20 }, "amount"],
       ["a blank ID", { ...validExpense, id: "   " }, "id"],
       ["more than two decimal places", { ...validExpense, amount: 10.123 }, "amount"],
+      ["a fraction of a paisa close to a whole amount", { ...validExpense, amount: 10.00000000001 }, "amount"],
       ["an invalid calendar date", { ...validExpense, date: "2026-02-30" }, "date"],
       ["an invalid date format", { ...validExpense, date: "31-07-2026" }, "date"]
     ])("rejects %s", async (_caseName, body, field) => {
