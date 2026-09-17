@@ -211,6 +211,8 @@ DELETE /expenses/dcfe5d87-f7a1-4c19-8651-d310f558b6f0
 - `204 No Content` when the expense is deleted
 - `404 Not Found` when no expense has that ID
 
+URL-encode IDs containing special characters. Malformed URL encoding returns `400 Bad Request` with the code `INVALID_URL`.
+
 ## Validation Rules
 
 - `id` is optional, trimmed, non-empty and at most 100 characters. A UUID is generated when it is left out.

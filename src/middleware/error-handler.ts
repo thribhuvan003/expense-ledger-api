@@ -16,6 +16,16 @@ export const notFoundHandler: RequestHandler = (_request, response) => {
 };
 
 export const errorHandler: ErrorRequestHandler = (error: unknown, _request, response, _next) => {
+  if (error instanceof URIError && "status" in error && error.status === 400) {
+    response.status(400).json({
+      error: {
+        code: "INVALID_URL",
+        message: "The request URL contains invalid encoding."
+      }
+    });
+    return;
+  }
+
   if (error instanceof ZodError) {
     response.status(400).json({
       error: {

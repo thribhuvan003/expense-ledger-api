@@ -328,6 +328,35 @@ describe("Expense API", () => {
   });
 
   describe("DELETE /expenses/:id", () => {
+    it.each(["%", "%GG", "%E0%A4%A"])("rejects malformed URL encoding: %s", async (id) => {
+      await request(app).post("/expenses").send({ ...validExpense, id: "expense-1" });
+
+      const response = await request(app).delete(`/expenses/${id}`);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        error: {
+          code: "INVALID_URL",
+          message: "The request URL contains invalid encoding."
+        }
+      });
+
+      const remaining = await request(app).get("/expenses");
+      expect(remaining.body).toEqual([{ ...validExpense, id: "expense-1" }]);
+    });
+
+    it("deletes an expense with a URL-encoded ID", async () => {
+      const id = "lunch / tea 50%";
+      const created = await request(app).post("/expenses").send({ ...validExpense, id });
+      expect(created.status).toBe(201);
+
+      const response = await request(app).delete(`/expenses/${encodeURIComponent(id)}`);
+
+      expect(response.status).toBe(204);
+      const remaining = await request(app).get("/expenses");
+      expect(remaining.body).toEqual([]);
+    });
+
     it("deletes an existing expense and returns 204", async () => {
       const created = await request(app).post("/expenses").send(validExpense);
 
