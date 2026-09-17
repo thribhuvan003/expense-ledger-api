@@ -165,6 +165,28 @@ describe("Expense API", () => {
         }
       });
     });
+
+    it.each([
+      ["Content-Type", "application/json; charset=iso-8859-1"],
+      ["Content-Encoding", "compress"]
+    ])("rejects unsupported %s: %s", async (header, value) => {
+      const response = await request(app)
+        .post("/expenses")
+        .set("Content-Type", "application/json")
+        .set(header, value)
+        .send(JSON.stringify(validExpense));
+
+      expect(response.status).toBe(415);
+      expect(response.body).toEqual({
+        error: {
+          code: "UNSUPPORTED_MEDIA_TYPE",
+          message: "The request body uses an unsupported charset or encoding."
+        }
+      });
+
+      const expenses = await request(app).get("/expenses");
+      expect(expenses.body).toEqual([]);
+    });
   });
 
   describe("GET /expenses", () => {

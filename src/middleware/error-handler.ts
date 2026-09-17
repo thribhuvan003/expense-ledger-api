@@ -41,6 +41,19 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
   }
 
   const parserError = error as ParserError;
+  if (
+    parserError.status === 415 &&
+    (parserError.type === "charset.unsupported" || parserError.type === "encoding.unsupported")
+  ) {
+    response.status(415).json({
+      error: {
+        code: "UNSUPPORTED_MEDIA_TYPE",
+        message: "The request body uses an unsupported charset or encoding."
+      }
+    });
+    return;
+  }
+
   if (parserError.type === "entity.too.large" && parserError.status === 413) {
     response.status(413).json({
       error: {

@@ -45,6 +45,14 @@ export const openApiDocument = {
                 schema: { $ref: "#/components/schemas/ErrorResponse" }
               }
             }
+          },
+          "415": {
+            description: "The request body uses an unsupported charset or encoding",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ErrorResponse" }
+              }
+            }
           }
         }
       },
