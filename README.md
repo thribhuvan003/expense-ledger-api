@@ -96,7 +96,7 @@ npm run start
 
 This compiles the project first, so it works on a fresh checkout without a separate build step.
 
-The server uses port `3000` by default. Set the `PORT` environment variable to use a different one. If the port is already taken, the server prints a short message saying so and exits instead of failing with a stack trace.
+The server uses port `3000` by default. Set `PORT` to a whole number from `0` to `65535` to use a different one. `PORT=0` lets the operating system choose a free port; the startup message prints the selected port. Invalid or empty values are rejected. If the port is already taken, the server prints a short message saying so and exits instead of failing with a stack trace.
 
 For development with automatic restarts:
 
