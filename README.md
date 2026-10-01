@@ -42,7 +42,7 @@ Expenses are stored in memory because the assignment allows it and does not requ
 ## Project Structure
 
 ```text
-expense-ledger-api-/
+expense-ledger-api/
 ├── README.md
 ├── AI_NOTES.md
 ├── package.json
@@ -51,6 +51,7 @@ expense-ledger-api-/
 ├── .gitignore
 ├── src/
 │   ├── app.ts
+│   ├── config.ts
 │   ├── server.ts
 │   ├── openapi.ts
 │   ├── expenses/
@@ -62,6 +63,7 @@ expense-ledger-api-/
 │   └── middleware/
 │       └── error-handler.ts
 └── tests/
+    ├── config.test.ts
     └── expenses.api.test.ts
 ```
 
