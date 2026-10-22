@@ -190,6 +190,16 @@ describe("Expense API", () => {
   });
 
   describe("GET /expenses", () => {
+    it.each(["__proto__=ignored", "__proto__[category]=Food"])(
+      "rejects unsupported query keys instead of dropping them: %s",
+      async (query) => {
+        const response = await request(app).get(`/expenses?${query}`);
+
+        expect(response.status).toBe(400);
+        expect(response.body.error.code).toBe("VALIDATION_ERROR");
+      }
+    );
+
     it("returns an empty array when no expenses exist", async () => {
       const response = await request(app).get("/expenses");
 

@@ -12,6 +12,7 @@ export function createApp(): Express {
   const service = new ExpenseService(repository);
 
   app.disable("x-powered-by");
+  app.set("query parser", "simple");
   app.use(express.json());
 
   app.get("/openapi.json", (_request, response) => {
