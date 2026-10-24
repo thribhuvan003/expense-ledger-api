@@ -1,0 +1,59 @@
+@baseUrl = http://localhost:3000
+
+### Run these requests in order against a disposable local server.
+### This example creates and deletes only the fixed ID below.
+### Expected: 201 Created. Use a different ID if this one already exists.
+POST {{baseUrl}}/expenses
+Content-Type: application/json
+
+{
+  "id": "local-walkthrough-lunch",
+  "title": "Lunch",
+  "amount": 180.50,
+  "category": "Food",
+  "date": "2026-10-24"
+}
+
+### List expenses. Expected: 200 OK, including the expense above.
+GET {{baseUrl}}/expenses
+
+### Filter without case sensitivity. Expected: 200 OK.
+GET {{baseUrl}}/expenses?category=food
+
+### Totals. On an otherwise empty server, overall and Food are both 180.5.
+GET {{baseUrl}}/expenses/summary
+
+### Duplicate ID. Expected: 409, EXPENSE_ID_CONFLICT.
+POST {{baseUrl}}/expenses
+Content-Type: application/json
+
+{
+  "id": "local-walkthrough-lunch",
+  "title": "Lunch",
+  "amount": 180.50,
+  "category": "Food",
+  "date": "2026-10-24"
+}
+
+### Invalid amount. Expected: 400, VALIDATION_ERROR.
+POST {{baseUrl}}/expenses
+Content-Type: application/json
+
+{
+  "title": "Invalid expense",
+  "amount": 0,
+  "category": "Food",
+  "date": "2026-10-24"
+}
+
+### Unsupported query parameter. Expected: 400, VALIDATION_ERROR.
+GET {{baseUrl}}/expenses?limit=10
+
+### Remove the example expense. Expected: 204, empty response body.
+DELETE {{baseUrl}}/expenses/local-walkthrough-lunch
+
+### Delete again. Expected: 404, EXPENSE_NOT_FOUND.
+DELETE {{baseUrl}}/expenses/local-walkthrough-lunch
+
+### Inspect the API contract. Expected: 200 OK.
+GET {{baseUrl}}/openapi.json
