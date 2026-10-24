@@ -29,6 +29,22 @@ npm test
 
 Each step is explained in more detail below.
 
+## Try the API
+
+Open [examples/expenses.http](examples/expenses.http) in an editor with an HTTP
+request client, such as VS Code with the REST Client extension. Start the server,
+then send the requests individually from top to bottom. The collection covers
+creation, listing, filtering, totals, duplicate IDs, invalid input and deletion,
+with the expected response status beside each request.
+
+Use a disposable local server: the sequence creates and deletes the fixed ID
+`local-walkthrough-lunch`. If that ID already belongs to an expense you need,
+change it everywhere in the collection first. Change `baseUrl` if you use a
+different port. Totals in the comments assume an otherwise empty store.
+
+For startup failures and error responses, see the
+[troubleshooting guide](docs/troubleshooting.md).
+
 ## Technology Choices
 
 - **Node.js and TypeScript** for a typed JavaScript backend
@@ -49,6 +65,10 @@ expense-ledger-api/
 ├── package-lock.json
 ├── tsconfig.json
 ├── .gitignore
+├── docs/
+│   └── troubleshooting.md
+├── examples/
+│   └── expenses.http
 ├── src/
 │   ├── app.ts
 │   ├── config.ts
