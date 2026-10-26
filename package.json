@@ -10,7 +10,9 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node dist/server.js",
-    "test": "vitest run"
+    "test": "vitest run",
+    "presmoke": "npm run build",
+    "smoke": "node scripts/smoke.mjs"
   },
   "engines": {
     "node": ">=20"
