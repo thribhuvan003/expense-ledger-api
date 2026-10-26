@@ -69,6 +69,8 @@ expense-ledger-api/
 │   └── troubleshooting.md
 ├── examples/
 │   └── expenses.http
+├── scripts/
+│   └── smoke.mjs
 ├── src/
 │   ├── app.ts
 │   ├── config.ts
@@ -135,6 +137,29 @@ npm test
 ```
 
 The tests create a fresh application and in-memory store for each test, so they do not depend on execution order.
+
+### Smoke check the compiled API
+
+After installing dependencies, run:
+
+```bash
+npm run smoke
+```
+
+This command builds TypeScript and checks the compiled app over a real HTTP
+connection. It covers creation, case-insensitive filtering, totals, duplicate IDs,
+invalid amounts, deletion and the OpenAPI endpoint. A failed assertion or request
+returns a nonzero exit code.
+
+The check starts a fresh in-memory application on an available loopback port and
+closes it when finished. You do not need a running server, and it does not change
+expenses in any existing server. Each request has a five-second timeout.
+
+To rerun against an existing build without compiling again:
+
+```bash
+node scripts/smoke.mjs
+```
 
 ## API Endpoints
 
