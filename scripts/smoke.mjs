@@ -19,12 +19,27 @@ try {
       ...options,
       signal: AbortSignal.timeout(5000)
     });
-    assert.equal(response.status, expectedStatus, `${options?.method ?? "GET"} ${path}`);
+    const label = `${options?.method ?? "GET"} ${path}`;
+    const body = await response.text();
+    assert.equal(
+      response.status,
+      expectedStatus,
+      `${label}: expected HTTP ${expectedStatus}, got ${response.status}; body: ${body.slice(0, 500)}`
+    );
     if (expectedStatus === 204) {
-      assert.equal(await response.text(), "");
+      assert.equal(body, "", `${label}: expected an empty response body`);
       return;
     }
-    return response.json();
+    assert.match(
+      response.headers.get("content-type") ?? "",
+      /^application\/json(?:\s*;|$)/i,
+      `${label}: expected an application/json response`
+    );
+    try {
+      return JSON.parse(body);
+    } catch (cause) {
+      throw new Error(`${label}: response body is not valid JSON`, { cause });
+    }
   }
 
   const expense = {
