@@ -317,6 +317,10 @@ After starting the server:
 - Category names are kept as entered after trimming, so `Food` is displayed as `Food` even when the filter used `food`.
 - Future dates are accepted because the assignment does not prohibit them.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local setup, API change guidance and the checks to run before opening a pull request.
+
 ## Author
 
 **Thribhuvan P**  
