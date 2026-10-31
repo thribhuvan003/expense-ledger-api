@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible problem with the expense API or local setup.
+title: "[Bug]: "
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include your operating system, Node.js version, npm version and repository commit.
+      placeholder: |
+        OS:
+        node --version:
+        npm --version:
+        Commit:
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Start from a fresh server and include the command or HTTP method, path and example request body.
+      placeholder: |
+        1. Start the server with...
+        2. Send this request...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: Describe the expected behavior, including the HTTP status and response if applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Include the observed behavior, HTTP status and error.code if available.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant output
+      description: Optional terminal output or a response using example data.
+      render: text
+    validations:
+      required: false
