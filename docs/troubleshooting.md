@@ -1,7 +1,7 @@
 # Local troubleshooting
 
-Run commands from the repository root. The examples below use a POSIX shell
-such as Bash; on Windows, use Git Bash or WSL for the inline environment variables.
+Run commands from the repository root. Inline environment-variable examples use
+Bash or another POSIX shell. PowerShell alternatives are included below.
 
 ## The server cannot bind to port 3000
 
@@ -9,6 +9,13 @@ If startup reports `Port 3000 is already in use`, choose another port:
 
 ```bash
 PORT=3001 npm start
+```
+
+In Windows PowerShell, set the variable before starting the server:
+
+```powershell
+$env:PORT = "3001"
+npm start
 ```
 
 Use `http://localhost:3001` for both API requests and `/api-docs`.
@@ -20,7 +27,23 @@ You can also let the operating system select an available port:
 PORT=0 npm start
 ```
 
+PowerShell equivalent:
+
+```powershell
+$env:PORT = "0"
+npm start
+```
+
 Read the selected port from the startup output. Do not send requests to port 0.
+
+PowerShell keeps this setting in the current terminal session. After stopping the
+server with Ctrl+C, remove it to restore the default port for future starts:
+
+```powershell
+Remove-Item Env:PORT -ErrorAction SilentlyContinue
+```
+
+Bash's inline `PORT=3001 npm start` applies only to that command.
 
 ## PORT is rejected before startup
 
