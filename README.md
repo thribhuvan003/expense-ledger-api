@@ -31,6 +31,9 @@ Each step is explained in more detail below.
 
 ## Try the API
 
+For terminal commands, follow the [curl walkthrough](docs/curl-walkthrough.md).
+
+
 Open [examples/expenses.http](examples/expenses.http) in an editor with an HTTP
 request client, such as VS Code with the REST Client extension. Start the server,
 then send the requests individually from top to bottom. The collection covers
