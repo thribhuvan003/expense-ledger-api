@@ -130,6 +130,15 @@ npm run dev
 
 ## Running Tests
 
+Run the build, test suite and compiled API smoke check together:
+
+```bash
+npm run check
+```
+
+The command stops at the first failing step.
+
+
 Run the complete test suite once:
 
 ```bash

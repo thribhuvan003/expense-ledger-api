@@ -34,13 +34,13 @@ sequence: it creates and deletes a fixed example ID.
 ## Check the change
 
 ```bash
-npm run build
-npm test
-node scripts/smoke.mjs
+npm run check
 ```
 
-The last command checks the compiled app, so run the build first. Alternatively,
-`npm run smoke` builds automatically and then runs the same check.
+This runs the TypeScript build, the test suite and the compiled API smoke check in
+order, stopping if any step fails. To run individual steps, use `npm run build`,
+`npm test` and `node scripts/smoke.mjs` in that order. Alternatively,
+`npm run smoke` builds automatically and then runs only the smoke check.
 The smoke check starts and closes its own application on a free loopback port;
 it does not require the development server.
 
