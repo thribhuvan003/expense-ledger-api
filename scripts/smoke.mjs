@@ -1,9 +1,15 @@
 import assert from "node:assert/strict";
 import { once } from "node:events";
+import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
 
 // Exercise the compiled application over a real loopback HTTP connection.
 // A fresh app owns its own in-memory store; existing servers are untouched.
+if (!existsSync(new URL("../dist/app.js", import.meta.url))) {
+  console.error("Smoke check cannot start: dist/app.js is missing. Run npm run smoke to build and check the API.");
+  process.exit(1);
+}
+
 const require = createRequire(import.meta.url);
 const { createApp } = require("../dist/app.js");
 const server = createApp().listen(0, "127.0.0.1");
