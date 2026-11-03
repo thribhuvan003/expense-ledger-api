@@ -82,6 +82,20 @@ try {
     byCategory: {}
   });
 
+  const { id: suppliedId, ...automaticInput } = expense;
+  const automaticExpense = await request("/expenses", 201, post(automaticInput));
+  const { id: generatedId, ...createdInput } = automaticExpense;
+  assert.match(
+    generatedId,
+    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+    "Omitting an ID must generate a UUID"
+  );
+  assert.notEqual(generatedId, suppliedId);
+  assert.deepEqual(createdInput, automaticInput);
+  assert.deepEqual(await request("/expenses", 200), [automaticExpense]);
+  await request(`/expenses/${encodeURIComponent(generatedId)}`, 204, { method: "DELETE" });
+  assert.deepEqual(await request("/expenses", 200), []);
+
   const contract = await request("/openapi.json", 200);
   assert.ok(contract.paths["/expenses"]);
   const advertisedServer = new URL(contract.servers[0].url, `${baseUrl}/openapi.json`);
@@ -90,7 +104,7 @@ try {
     `${baseUrl}/`,
     "OpenAPI must target the current API origin, including a custom port"
   );
-  console.log("Smoke check passed: compiled API, CRUD, filtering, totals, errors and OpenAPI.");
+  console.log("Smoke check passed: compiled API, CRUD, generated IDs, filtering, totals, errors and OpenAPI.");
 } catch (error) {
   console.error("Smoke check failed:", error);
   process.exitCode = 1;
