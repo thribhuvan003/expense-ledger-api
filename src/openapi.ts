@@ -16,7 +16,28 @@ export const openApiDocument = {
           required: true,
           content: {
             "application/json": {
-              schema: { $ref: "#/components/schemas/CreateExpense" }
+              schema: { $ref: "#/components/schemas/CreateExpense" },
+              examples: {
+                generatedId: {
+                  summary: "Let the server generate an ID",
+                  value: {
+                    title: "Lunch",
+                    amount: 180.5,
+                    category: "Food",
+                    date: "2026-07-31"
+                  }
+                },
+                suppliedId: {
+                  summary: "Supply a unique ID",
+                  value: {
+                    id: "expense-1",
+                    title: "Lunch",
+                    amount: 180.5,
+                    category: "Food",
+                    date: "2026-07-31"
+                  }
+                }
+              }
             }
           }
         },
@@ -148,7 +169,8 @@ export const openApiDocument = {
             type: "number",
             format: "double",
             minimum: 0.01,
-            description: "At least 0.01, at most two decimal places",
+            multipleOf: 0.01,
+            description: "At least 0.01, at most two decimal places; the amount in paise must be a safe integer",
             example: 180.5
           },
           category: { type: "string", minLength: 1, maxLength: 50, example: "Food" },
@@ -162,7 +184,7 @@ export const openApiDocument = {
         properties: {
           id: { type: "string", minLength: 1, maxLength: 100 },
           title: { type: "string", minLength: 1, maxLength: 100, example: "Lunch" },
-          amount: { type: "number", format: "double", example: 180.5 },
+          amount: { type: "number", format: "double", minimum: 0.01, multipleOf: 0.01, example: 180.5 },
           category: { type: "string", minLength: 1, maxLength: 50, example: "Food" },
           date: { type: "string", format: "date", example: "2026-07-31" }
         }
