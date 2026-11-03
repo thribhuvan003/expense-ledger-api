@@ -5,7 +5,7 @@ export const openApiDocument = {
     version: "1.0.0",
     description: "A REST API for recording, viewing, filtering, summarising and deleting expenses."
   },
-  servers: [{ url: "http://localhost:3000" }],
+  servers: [{ url: "/", description: "The origin serving this API document" }],
   tags: [{ name: "Expenses" }],
   paths: {
     "/expenses": {

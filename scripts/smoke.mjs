@@ -84,6 +84,12 @@ try {
 
   const contract = await request("/openapi.json", 200);
   assert.ok(contract.paths["/expenses"]);
+  const advertisedServer = new URL(contract.servers[0].url, `${baseUrl}/openapi.json`);
+  assert.equal(
+    advertisedServer.href,
+    `${baseUrl}/`,
+    "OpenAPI must target the current API origin, including a custom port"
+  );
   console.log("Smoke check passed: compiled API, CRUD, filtering, totals, errors and OpenAPI.");
 } catch (error) {
   console.error("Smoke check failed:", error);
