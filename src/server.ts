@@ -1,7 +1,14 @@
 import { createApp } from "./app";
 import { parsePort } from "./config";
 
-const port = parsePort(process.env.PORT);
+let port: number;
+try {
+  port = parsePort(process.env.PORT);
+} catch (error) {
+  const message = error instanceof Error ? error.message : "Invalid PORT configuration.";
+  console.error(`The server could not start: ${message}`);
+  process.exit(1);
+}
 const app = createApp();
 
 const server = app.listen(port, () => {
