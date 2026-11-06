@@ -11,6 +11,7 @@
     "prestart": "npm run build",
     "start": "node dist/server.js",
     "test": "vitest run",
+    "test:watch": "vitest --watch",
     "check": "npm run build && npm test && node scripts/smoke.mjs",
     "presmoke": "npm run build",
     "smoke": "node scripts/smoke.mjs"

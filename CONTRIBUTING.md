@@ -49,6 +49,15 @@ versions. If one version fails, inspect its job log even if the others pass.
 Newer runs of the same workflow event and branch or pull request cancel older
 runs. Each matrix job has a ten-minute limit.
 
+To rerun affected tests while editing:
+
+```bash
+npm run test:watch
+```
+
+Vitest stays running and watches source and test files. Press Ctrl+C to stop it.
+Use `npm test` or `npm run check` for a single run.
+
 ## Prepare the pull request
 
 Describe the problem, the resulting behavior, and the checks you ran. Include an

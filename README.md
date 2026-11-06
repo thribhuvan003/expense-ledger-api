@@ -150,6 +150,15 @@ npm test
 
 The tests create a fresh application and in-memory store for each test, so they do not depend on execution order.
 
+To rerun affected tests while editing:
+
+```bash
+npm run test:watch
+```
+
+Vitest stays running and watches source and test files. Press Ctrl+C to stop it.
+Use `npm test` or `npm run check` for a single run.
+
 ### Smoke check the compiled API
 
 After installing dependencies, run:
