@@ -55,7 +55,13 @@ export const openApiDocument = {
             description: "An expense with the supplied ID already exists",
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
+                schema: { $ref: "#/components/schemas/ErrorResponse" },
+                example: {
+                  error: {
+                    code: "EXPENSE_ID_CONFLICT",
+                    message: "An expense with that ID already exists."
+                  }
+                }
               }
             }
           },
@@ -63,7 +69,13 @@ export const openApiDocument = {
             description: "The JSON request body exceeds the 100 KiB limit",
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
+                schema: { $ref: "#/components/schemas/ErrorResponse" },
+                example: {
+                  error: {
+                    code: "PAYLOAD_TOO_LARGE",
+                    message: "The request body is too large."
+                  }
+                }
               }
             }
           },
@@ -71,7 +83,13 @@ export const openApiDocument = {
             description: "The request body uses an unsupported charset or encoding",
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
+                schema: { $ref: "#/components/schemas/ErrorResponse" },
+                example: {
+                  error: {
+                    code: "UNSUPPORTED_MEDIA_TYPE",
+                    message: "The request body uses an unsupported charset or encoding."
+                  }
+                }
               }
             }
           }
@@ -142,7 +160,13 @@ export const openApiDocument = {
             description: "Expense not found",
             content: {
               "application/json": {
-                schema: { $ref: "#/components/schemas/ErrorResponse" }
+                schema: { $ref: "#/components/schemas/ErrorResponse" },
+                example: {
+                  error: {
+                    code: "EXPENSE_NOT_FOUND",
+                    message: "No expense was found with that ID."
+                  }
+                }
               }
             }
           }
