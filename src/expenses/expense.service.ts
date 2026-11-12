@@ -52,14 +52,19 @@ export class ExpenseService {
       .map(toExpense);
   }
 
-  getSummary(): ExpenseSummary {
+  // Returns null when the aggregate exceeds the safe-integer paise range.
+  getSummary(): ExpenseSummary | null {
     // Categories are grouped the same way they are filtered, so "Food" and
     // "food" count as one category. The first spelling seen is the one shown.
     const totals = new Map<string, { category: string; totalInPaise: number }>();
     let overallInPaise = 0;
 
     for (const expense of this.repository.findAll()) {
-      overallInPaise += expense.amountInPaise;
+      const nextOverallInPaise = overallInPaise + expense.amountInPaise;
+      if (!Number.isSafeInteger(nextOverallInPaise)) {
+        return null;
+      }
+      overallInPaise = nextOverallInPaise;
 
       const key = expense.category.toLowerCase();
       const total = totals.get(key);

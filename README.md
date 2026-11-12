@@ -261,6 +261,8 @@ GET /expenses/summary
 
 Categories are grouped the same way they are filtered, so `Food` and `food` count as one category. The first spelling recorded is the one used in the response.
 
+If the combined total exceeds the safe-integer range in paise, this endpoint returns `409 Conflict` with code `EXPENSE_TOTAL_TOO_LARGE`. Individual expenses remain available to list or delete; deleting an expense can bring the total back into range.
+
 An empty store returns:
 
 ```json

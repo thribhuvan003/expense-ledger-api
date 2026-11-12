@@ -40,7 +40,17 @@ export function createExpenseRouter(service: ExpenseService): Router {
   });
 
   router.get("/summary", (_request, response) => {
-    response.status(200).json(service.getSummary());
+    const summary = service.getSummary();
+    if (!summary) {
+      response.status(409).json({
+        error: {
+          code: "EXPENSE_TOTAL_TOO_LARGE",
+          message: "The expense total is too large to calculate exactly."
+        }
+      });
+      return;
+    }
+    response.status(200).json(summary);
   });
 
   router.delete("/:id", (request, response, next) => {

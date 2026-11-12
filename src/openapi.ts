@@ -128,13 +128,27 @@ export const openApiDocument = {
         tags: ["Expenses"],
         summary: "Calculate expense totals",
         description:
-          "Returns the overall total and a total per category. Categories are grouped without case sensitivity.",
+          "Returns the overall total and a total per category. Categories are grouped without case sensitivity. Returns 409 if the aggregate exceeds the safe-integer paise range.",
         responses: {
           "200": {
             description: "Overall and category totals",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/ExpenseSummary" }
+              }
+            }
+          },
+          "409": {
+            description: "The aggregate exceeds the safe-integer paise range",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ErrorResponse" },
+                example: {
+                  error: {
+                    code: "EXPENSE_TOTAL_TOO_LARGE",
+                    message: "The expense total is too large to calculate exactly."
+                  }
+                }
               }
             }
           }
