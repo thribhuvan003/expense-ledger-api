@@ -13,6 +13,10 @@ export function createApp(): Express {
 
   app.disable("x-powered-by");
   app.set("query parser", "simple");
+  app.use("/expenses", (_request, response, next) => {
+    response.set("Cache-Control", "no-store");
+    next();
+  });
   app.use(express.json());
 
   app.get("/openapi.json", (_request, response) => {

@@ -184,6 +184,8 @@ node scripts/smoke.mjs
 
 ## API Endpoints
 
+Responses under `/expenses` include `Cache-Control: no-store`.
+
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | `POST` | `/expenses` | Add an expense |
