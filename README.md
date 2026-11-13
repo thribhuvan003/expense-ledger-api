@@ -247,6 +247,8 @@ Category filtering is case-insensitive. An unknown category returns an empty arr
 
 ### Calculate totals
 
+This endpoint accepts no query parameters. Unsupported parameters, including a category filter, return `400 Bad Request` with code `VALIDATION_ERROR`.
+
 ```http
 GET /expenses/summary
 ```

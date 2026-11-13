@@ -64,6 +64,8 @@ export const expenseQuerySchema = z
   })
   .strict();
 
+export const expenseSummaryQuerySchema = z.object({}).strict();
+
 // IDs may be supplied by the caller, so this only checks the shape the API
 // stores, not that it looks like a UUID.
 export const expenseIdSchema = z

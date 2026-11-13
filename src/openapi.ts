@@ -162,7 +162,7 @@ export const openApiDocument = {
         tags: ["Expenses"],
         summary: "Calculate expense totals",
         description:
-          "Returns the overall total and a total per category. Categories are grouped without case sensitivity. Returns 409 if the aggregate exceeds the safe-integer paise range.",
+          "Returns the overall total and a total per category. Categories are grouped without case sensitivity. No query parameters are accepted. Returns 409 if the aggregate exceeds the safe-integer paise range.",
         responses: {
           "200": {
             description: "Overall and category totals",
@@ -172,6 +172,7 @@ export const openApiDocument = {
               }
             }
           },
+          "400": { $ref: "#/components/responses/ValidationError" },
           "409": {
             description: "The aggregate exceeds the safe-integer paise range",
             content: {
