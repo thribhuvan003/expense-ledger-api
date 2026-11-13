@@ -50,7 +50,41 @@ export const openApiDocument = {
               }
             }
           },
-          "400": { $ref: "#/components/responses/ValidationError" },
+          "400": {
+            description: "Invalid request data, malformed JSON or an unreadable body",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/ErrorResponse" },
+                examples: {
+                  invalidData: {
+                    value: {
+                      error: {
+                        code: "VALIDATION_ERROR",
+                        message: "The request contains invalid data.",
+                        details: [{ field: "amount", message: "Amount must be at least 0.01." }]
+                      }
+                    }
+                  },
+                  invalidJson: {
+                    value: {
+                      error: {
+                        code: "INVALID_JSON",
+                        message: "The request body contains invalid JSON."
+                      }
+                    }
+                  },
+                  unreadableBody: {
+                    value: {
+                      error: {
+                        code: "INVALID_BODY",
+                        message: "The request body could not be read."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "409": {
             description: "An expense with the supplied ID already exists",
             content: {

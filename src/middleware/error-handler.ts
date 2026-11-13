@@ -74,6 +74,16 @@ export const errorHandler: ErrorRequestHandler = (error: unknown, _request, resp
     return;
   }
 
+  if (parserError.status === 400) {
+    response.status(400).json({
+      error: {
+        code: "INVALID_BODY",
+        message: "The request body could not be read."
+      }
+    });
+    return;
+  }
+
   response.status(500).json({
     error: {
       code: "INTERNAL_ERROR",

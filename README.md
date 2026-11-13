@@ -314,6 +314,8 @@ A validation failure follows one response format:
 
 Stack traces and internal error details are not returned to clients.
 
+Malformed compressed or otherwise unreadable request bodies return `400 Bad Request` with code `INVALID_BODY`. Malformed JSON returns `400` with code `INVALID_JSON`.
+
 JSON request bodies larger than 100 KiB return `413 Payload Too Large` with the code `PAYLOAD_TOO_LARGE`.
 
 Unsupported request charsets or content encodings return `415 Unsupported Media Type` with the code `UNSUPPORTED_MEDIA_TYPE`.
