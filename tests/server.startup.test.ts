@@ -1,4 +1,6 @@
 import { execFile } from "node:child_process";
+import { once } from "node:events";
+import { createServer } from "node:net";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { describe, expect, it } from "vitest";
@@ -26,5 +28,37 @@ describe("Server startup", () => {
     expect(result.stderr).toBe(
       "The server could not start: PORT must be a whole number between 0 and 65535.\n"
     );
+  }, 15000);
+
+  it("reports an occupied port without disrupting the existing listener", async () => {
+    const listener = createServer().listen(0, "0.0.0.0");
+    try {
+      await once(listener, "listening");
+      const address = listener.address();
+      if (!address || typeof address === "string") throw new Error("Expected a TCP listener");
+      const result = await run(process.execPath, ["--import", "tsx", serverPath], {
+        env: { ...process.env, PORT: String(address.port) },
+        encoding: "utf8",
+        timeout: 10000
+      }).then(
+        ({ stdout, stderr }) => ({ code: 0, stdout, stderr }),
+        (error: { code: unknown; stdout: string; stderr: string }) => ({
+          code: error.code,
+          stdout: error.stdout,
+          stderr: error.stderr
+        })
+      );
+
+      expect(result.code).toBe(1);
+      expect(result.stdout).toBe("");
+      expect(result.stderr).toBe(
+        `Port ${address.port} is already in use. Set PORT to a free port and start again.\n`
+      );
+      expect(listener.listening).toBe(true);
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        listener.close((error) => error ? reject(error) : resolve());
+      });
+    }
   }, 15000);
 });
