@@ -62,34 +62,50 @@ Expenses are stored in memory because the assignment allows it and does not requ
 
 ```text
 expense-ledger-api/
-├── README.md
-├── AI_NOTES.md
-├── package.json
-├── package-lock.json
-├── tsconfig.json
+├── .editorconfig
+├── .gitattributes
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   └── bug_report.yml
+│   ├── pull_request_template.md
+│   └── workflows/
+│       └── ci.yml
 ├── .gitignore
+├── AI_NOTES.md
+├── CONTRIBUTING.md
+├── README.md
 ├── docs/
+│   ├── curl-walkthrough.md
 │   └── troubleshooting.md
 ├── examples/
 │   └── expenses.http
+├── package-lock.json
+├── package.json
 ├── scripts/
 │   └── smoke.mjs
 ├── src/
 │   ├── app.ts
 │   ├── config.ts
-│   ├── server.ts
-│   ├── openapi.ts
 │   ├── expenses/
 │   │   ├── expense.repository.ts
 │   │   ├── expense.routes.ts
 │   │   ├── expense.schema.ts
 │   │   ├── expense.service.ts
 │   │   └── expense.types.ts
-│   └── middleware/
-│       └── error-handler.ts
-└── tests/
-    ├── config.test.ts
-    └── expenses.api.test.ts
+│   ├── middleware/
+│   │   └── error-handler.ts
+│   ├── openapi.ts
+│   └── server.ts
+├── tests/
+│   ├── cache.api.test.ts
+│   ├── compression.api.test.ts
+│   ├── config.test.ts
+│   ├── errors.api.test.ts
+│   ├── expenses.api.test.ts
+│   ├── server.startup.test.ts
+│   ├── summary-limits.api.test.ts
+│   └── summary-query.api.test.ts
+└── tsconfig.json
 ```
 
 ## Prerequisites
