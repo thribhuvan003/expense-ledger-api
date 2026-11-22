@@ -69,12 +69,14 @@ Read `error.code` in the JSON response:
 
 | Status / code | What to check |
 | --- | --- |
-| 400 / `VALIDATION_ERROR` | Read `error.details`. Send a positive amount with at most two decimal places and a real date in `YYYY-MM-DD` format. Only `category` is accepted as a list query parameter. |
+| 400 / `VALIDATION_ERROR` | Read `error.details`. Send a positive amount with at most two decimal places and a real date in `YYYY-MM-DD` format. Only `category` is accepted on `GET /expenses`; `GET /expenses/summary` accepts no query parameters. |
 | 400 / `INVALID_JSON` | Fix malformed JSON, such as a trailing comma or an unquoted property name. |
+| 400 / `INVALID_BODY` | Send a complete request body. If using gzip or deflate, verify that the bytes are correctly compressed; an encoding header alone does not compress the data. |
 | 400 / `INVALID_URL` | URL-encode IDs correctly; incomplete percent escapes are invalid. |
 | 404 / `EXPENSE_NOT_FOUND` | Confirm the expense ID exists in the current server process. |
 | 404 / `NOT_FOUND` | Check the route and HTTP method against the [endpoint table](../README.md#api-endpoints). |
 | 409 / `EXPENSE_ID_CONFLICT` | Omit `id` to generate a UUID, or choose an ID that is not already stored. |
+| 409 / `EXPENSE_TOTAL_TOO_LARGE` | The combined total exceeds the safe-integer range in paise. List the stored expenses and delete an expense if appropriate to bring the total back into range. |
 | 413 / `PAYLOAD_TOO_LARGE` | Keep the JSON request body within the 100 KiB limit. |
 | 415 / `UNSUPPORTED_MEDIA_TYPE` | Remove unsupported charset or content-encoding headers; use ordinary UTF-8 JSON. |
 
@@ -91,9 +93,10 @@ For repeatable manual checks, recreate the example expense after restarting.
 ## Check the project before reporting a problem
 
 ```bash
-npm run build
-npm test
+npm run check
 ```
+
+This builds the app, runs the tests and checks the compiled API in sequence.
 
 Include the Node.js version, the command or request that failed, the HTTP status
 and the response's `error.code`. Remove personal expense data before sharing logs.
