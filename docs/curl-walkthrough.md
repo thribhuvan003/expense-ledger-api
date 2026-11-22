@@ -35,6 +35,23 @@ curl --fail --silent --show-error --include \
 Running this POST twice before deleting the expense returns `409 Conflict`
 because the ID is already stored.
 
+## Inspect a duplicate-ID error
+
+Before deleting the example expense, send the same ID again.
+Expected: `409 Conflict`, code `EXPENSE_ID_CONFLICT`, and message
+`An expense with that ID already exists.`
+
+```bash
+curl --silent --show-error --include \
+  -X POST "$base_url/expenses" \
+  -H 'Content-Type: application/json' \
+  --data '{"id":"curl-demo-lunch","title":"Lunch","amount":180.5,"category":"Food","date":"2026-11-02"}'
+```
+
+The error leaves the original expense unchanged, so the later totals still apply.
+This command omits `--fail` so curl prints the JSON error body; inspect the HTTP
+status shown in the headers.
+
 ## Filter by category
 
 Expected: `200 OK` with an array containing the lunch expense.
@@ -51,6 +68,20 @@ Expected: `200 OK` with `{"overall":180.5,"byCategory":{"Food":180.5}}`.
 ```bash
 curl --fail --silent --show-error --include "$base_url/expenses/summary"
 ```
+
+## Inspect an unsupported summary filter
+
+Summary totals are always for the complete store. Filtering the expense list
+does not filter the summary endpoint.
+
+Expected: `400 Bad Request`, code `VALIDATION_ERROR`. No expense is changed.
+
+```bash
+curl --silent --show-error --include "$base_url/expenses/summary?category=food"
+```
+
+This is an intentional error check. The normal summary request above takes no
+query parameters.
 
 ## Delete the example
 
