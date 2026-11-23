@@ -81,6 +81,12 @@ Read `error.code` in the JSON response:
 | 415 / `UNSUPPORTED_MEDIA_TYPE` | Remove unsupported charset or content-encoding headers; use ordinary UTF-8 JSON. |
 
 For POST requests, set `Content-Type: application/json`.
+
+Dates must contain exactly `YYYY-MM-DD`, with a year from `0001` through `9999`.
+Send the calendar date without a time, timezone or surrounding whitespace.
+Leap days follow Gregorian rules: `2000-02-29` and `2028-02-29` are valid;
+`1900-02-29` and `2100-02-29` are invalid. Rejected dates do not create expenses.
+
 Use [examples/expenses.http](../examples/expenses.http) for a complete sequence
 with expected success and error statuses. Run it against disposable local data.
 
