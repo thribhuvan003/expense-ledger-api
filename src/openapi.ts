@@ -242,6 +242,7 @@ export const openApiDocument = {
             type: "number",
             format: "double",
             minimum: 0.01,
+            maximum: Number.MAX_SAFE_INTEGER / 100,
             multipleOf: 0.01,
             description: "At least 0.01, at most two decimal places; the amount in paise must be a safe integer",
             example: 180.5
@@ -257,7 +258,14 @@ export const openApiDocument = {
         properties: {
           id: { type: "string", minLength: 1, maxLength: 100 },
           title: { type: "string", minLength: 1, maxLength: 100, example: "Lunch" },
-          amount: { type: "number", format: "double", minimum: 0.01, multipleOf: 0.01, example: 180.5 },
+          amount: {
+            type: "number",
+            format: "double",
+            minimum: 0.01,
+            maximum: Number.MAX_SAFE_INTEGER / 100,
+            multipleOf: 0.01,
+            example: 180.5
+          },
           category: { type: "string", minLength: 1, maxLength: 50, example: "Food" },
           date: { type: "string", format: "date", example: "2026-07-31" }
         }
