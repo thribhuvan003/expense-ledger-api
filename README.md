@@ -187,7 +187,7 @@ npm run smoke
 
 This command builds TypeScript and checks the compiled app over a real HTTP
 connection. It covers creation, case-insensitive filtering, totals, duplicate IDs,
-invalid amounts, deletion and the OpenAPI endpoint. A failed assertion or request
+invalid amounts, generated IDs, deletion of URL-encoded Unicode IDs and the OpenAPI endpoint. A failed assertion or request
 returns a nonzero exit code.
 
 The check starts a fresh in-memory application on an available loopback port and
@@ -307,7 +307,7 @@ URL-encode IDs containing special characters. Malformed URL encoding returns `40
 
 ## Validation Rules
 
-- `id` is optional, trimmed, non-empty and at most 100 characters. A UUID is generated when it is left out.
+- `id` is optional, trimmed, non-empty and at most 100 characters. It must contain valid Unicode so it can be URL-encoded for deletion; isolated UTF-16 surrogates are rejected. A UUID is generated when it is left out.
 - `title` is required, trimmed, non-empty and at most 100 characters.
 - `amount` is required, at least `0.01` and limited to two decimal places. Amounts too large to hold exactly in paise are rejected.
 - `category` is required, trimmed, non-empty and at most 50 characters.

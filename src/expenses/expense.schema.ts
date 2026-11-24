@@ -39,9 +39,26 @@ function hasAtMostTwoDecimalPlaces(value: number): boolean {
   return Math.round(value * 100) / 100 === value;
 }
 
+// Every stored ID must be usable in the DELETE route. Lone UTF-16 surrogates
+// survive JSON parsing but cannot be encoded as a UTF-8 URL path.
+function canEncodeId(value: string): boolean {
+  try {
+    encodeURIComponent(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export const createExpenseSchema = z
   .object({
-    id: z.string().trim().min(1, "ID cannot be empty.").max(100).optional(),
+    id: z
+      .string()
+      .trim()
+      .min(1, "ID cannot be empty.")
+      .max(100)
+      .refine(canEncodeId, { message: "ID must contain valid Unicode characters." })
+      .optional(),
     title: z.string().trim().min(1, "Title is required.").max(100),
     amount: z
       .number({ invalid_type_error: "Amount must be a number." })
