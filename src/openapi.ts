@@ -234,7 +234,7 @@ export const openApiDocument = {
             type: "string",
             minLength: 1,
             maxLength: 100,
-            description: "Optional. A UUID is generated when this is left out.",
+            description: "Optional. Must contain valid Unicode characters so it can be URL-encoded for deletion. A UUID is generated when this is left out.",
             example: "expense-1"
           },
           title: { type: "string", minLength: 1, maxLength: 100, example: "Lunch" },

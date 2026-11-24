@@ -65,6 +65,23 @@ describe("Expense API", () => {
       expect(response.body.id).toBe("expense-1");
     });
 
+    it.each(["broken\ud800", "broken\udfff", "\ud800\ud800"])(
+      "rejects an ID that cannot be encoded into a deletion URL: %j",
+      async (id) => {
+        const app = createApp();
+        const rejected = await request(app).post("/expenses").send({ ...validExpense, id });
+
+        expect(rejected.status).toBe(400);
+        expect(rejected.body.error.code).toBe("VALIDATION_ERROR");
+        expect(rejected.body.error.details).toContainEqual({
+          field: "id",
+          message: "ID must contain valid Unicode characters."
+        });
+        const remaining = await request(app).get("/expenses");
+        expect(remaining.body).toEqual([]);
+      }
+    );
+
     it("rejects a second expense with the same ID", async () => {
       await request(app).post("/expenses").send({ ...validExpense, id: "expense-1" });
 
@@ -387,8 +404,7 @@ describe("Expense API", () => {
       expect(remaining.body).toEqual([{ ...validExpense, id: "expense-1" }]);
     });
 
-    it("deletes an expense with a URL-encoded ID", async () => {
-      const id = "lunch / tea 50%";
+    it.each(["lunch / tea 50%", "tea 🍵", "చాయ్"])("deletes a URL-encoded ID: %s", async (id) => {
       const created = await request(app).post("/expenses").send({ ...validExpense, id });
       expect(created.status).toBe(201);
 
