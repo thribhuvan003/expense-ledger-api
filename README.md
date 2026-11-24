@@ -187,7 +187,7 @@ npm run smoke
 
 This command builds TypeScript and checks the compiled app over a real HTTP
 connection. It covers creation, case-insensitive filtering, totals, duplicate IDs,
-invalid amounts, deletion and the OpenAPI endpoint. A failed assertion or request
+invalid amounts, generated IDs, deletion of URL-encoded Unicode IDs and the OpenAPI endpoint. A failed assertion or request
 returns a nonzero exit code.
 
 The check starts a fresh in-memory application on an available loopback port and

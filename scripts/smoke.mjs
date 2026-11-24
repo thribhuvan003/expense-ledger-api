@@ -96,6 +96,16 @@ try {
   await request(`/expenses/${encodeURIComponent(generatedId)}`, 204, { method: "DELETE" });
   assert.deepEqual(await request("/expenses", 200), []);
 
+  const encodedIdExpense = { ...expense, id: "lunch / tea 50% 🍵" };
+  assert.deepEqual(await request("/expenses", 201, post(encodedIdExpense)), encodedIdExpense);
+  assert.deepEqual(await request("/expenses", 200), [encodedIdExpense]);
+  await request(`/expenses/${encodeURIComponent(encodedIdExpense.id)}`, 204, { method: "DELETE" });
+  assert.deepEqual(await request("/expenses", 200), []);
+  assert.deepEqual(await request("/expenses/summary", 200), {
+    overall: 0,
+    byCategory: {}
+  });
+
   const contract = await request("/openapi.json", 200);
   assert.ok(contract.paths["/expenses"]);
   const advertisedServer = new URL(contract.servers[0].url, `${baseUrl}/openapi.json`);
@@ -104,7 +114,7 @@ try {
     `${baseUrl}/`,
     "OpenAPI must target the current API origin, including a custom port"
   );
-  console.log("Smoke check passed: compiled API, CRUD, generated IDs, filtering, totals, errors and OpenAPI.");
+  console.log("Smoke check passed: compiled API, CRUD, generated and URL-encoded IDs, filtering, totals, errors and OpenAPI.");
 } catch (error) {
   console.error("Smoke check failed:", error);
   process.exitCode = 1;
